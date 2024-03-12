@@ -17,6 +17,11 @@ const Quiz = () => {
     }
     }
    }
+   const next = ()=>{
+    setIndex((prev)=>prev +1)
+    setLock(false);
+    
+   }
   return (
     <div className='container'>
         <h1>Quiz App</h1>
@@ -28,7 +33,7 @@ const Quiz = () => {
             <li onClick={()=>{checkAns(3)}}>{question.option3}</li>
             <li onClick={()=>{checkAns(4)}}>{question.option4}</li>
         </ul>
-        <button>Next</button>
+        <button onClick={next}>Next</button>
         <div className="index">1 of 5 questions</div>
     </div>
   )
