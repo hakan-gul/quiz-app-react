@@ -1,20 +1,36 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import './quiz.css'
 import {data} from "../../assets/data.js"
 
 const Quiz = () => {
    let [index, setIndex] = useState(0);
    let [question, setQuestion] = useState(data[index]);
-   let [trueQuestion, setTrueQuestion] = useState(1);
+   let [score, setScore] = useState(0);
    let [lock, setLock] = useState(false);
+
+   let Option1 = useRef(null);
+   let Option2 = useRef(null);
+   let Option3 = useRef(null);
+   let Option4 = useRef(null);
+
+
+   let option_array = [Option1, Option2, Option3, Option4];
 
    const checkAns = (ans) =>{
     if (lock === false){
       if(question.ans==ans){
-      setTrueQuestion(trueQuestion + 1);
+      setScore((prev)=> prev + 1);
       setLock(true);
-      console.log(trueQuestion)
+      console.log(score)
     }
+    }
+   }
+
+   const next = () =>{
+    if(lock === true){
+      setIndex(index++)
+      setQuestion(data[index]);
+      setLock(false);
     }
    }
   return (
@@ -28,8 +44,8 @@ const Quiz = () => {
             <li onClick={()=>{checkAns(3)}}>{question.option3}</li>
             <li onClick={()=>{checkAns(4)}}>{question.option4}</li>
         </ul>
-        <button>Next</button>
-        <div className="index">1 of 5 questions</div>
+        <button onClick={next}>Next</button>
+        <div className="index">{index +1} of {data.length} questions</div>
     </div>
   )
 }
