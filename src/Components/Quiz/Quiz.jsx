@@ -18,18 +18,14 @@ const Quiz = () => {
    let option_array = [Option1,Option2,Option3,Option4];
 
    const checkAns = (ans) =>{
-    option_array.map((option)=>(
-      option.current.classList.remove("correct")
-    ))
-     option_array[ans-1].current.classList.add("correct");
-    if (lock === false){
-      if(question.ans==ans){
-      setLock(true);
-      setScore(prev=> prev + 1);
-      
-
-    }else{
-      setLock(true);
+     if (lock === false){
+      option_array.map((option)=>(
+        option.current.classList.remove("correct")
+      ))
+       option_array[ans-1].current.classList.add("correct");
+       setLock(true);
+       if(question.ans==ans){
+        setScore(prev=> prev + 1);
     }
     }
    }
