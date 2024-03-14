@@ -1,58 +1,73 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import './quiz.css'
 import {data} from "../../assets/data.js"
+import { useRef } from 'react'
 
 const Quiz = () => {
    let [index, setIndex] = useState(0);
    let [question, setQuestion] = useState(data[index]);
-   let [score, setScore] = useState(0);
    let [lock, setLock] = useState(false);
+   let [score, setScore] = useState(0);
+   let [result,setResult] = useState(false)
 
    let Option1 = useRef(null);
    let Option2 = useRef(null);
    let Option3 = useRef(null);
    let Option4 = useRef(null);
 
-
-   let option_array = [Option1, Option2, Option3, Option4];
+   let option_array = [Option1,Option2,Option3,Option4];
 
    const checkAns = (ans) =>{
-    option_array.map((option)=>(
-      option.current.classList.remove("correct")
-    ))
-     option_array[ans-1].current.classList.add("correct");
-    if (lock === false){
-      if(question.ans==ans){
-      setLock(true);
-      setScore(prev=> prev + 1);
-      
-
-    }else{
-      setLock(true);
+     if (lock === false){
+      option_array.map((option)=>(
+        option.current.classList.remove("correct")
+      ))
+       option_array[ans-1].current.classList.add("correct");
+       setLock(true);
+       if(question.ans==ans){
+        setScore(prev=> prev + 1);
     }
     }
    }
 
-   const next = () =>{
-    if(lock === true){
-      setIndex(index++)
+  const next = () =>{
+    if (lock===true) {
+      if(index ===data.length-1){
+        setResult(true);
+        return 0;
+      }
+      setIndex(++index)
       setQuestion(data[index]);
       setLock(false);
+      option_array.map((option)=>(
+        option.current.classList.remove("correct")
+      ))
     }
-   }
+  }
+
+  const reset = ()=>{
+    setIndex(0);
+    setQuestion(data[0]);
+    setScore(0);
+    setLock(false);
+    setResult(false);
+  }
   return (
     <div className='container'>
         <h1>Quiz App</h1>
         <hr />
-        <h2>{index + 1} {question.question}</h2>
+        
+        {result?<>skorunuz %{score*20} tebrikler
+        <button onClick={reset}>Tekrar Başlat</button> </>:<><h2>{index + 1} {question.question}</h2>
         <ul>
-            <li onClick={()=>{checkAns(1)}}>{question.option1}</li>
-            <li onClick={()=>{checkAns(2)}}>{question.option2}</li>
-            <li onClick={()=>{checkAns(3)}}>{question.option3}</li>
-            <li onClick={()=>{checkAns(4)}}>{question.option4}</li>
+            <li ref={Option1} onClick={()=>{checkAns(1)}}>{question.option1}</li>
+            <li ref={Option2} onClick={()=>{checkAns(2)}}>{question.option2}</li>
+            <li ref={Option3} onClick={()=>{checkAns(3)}}>{question.option3}</li>
+            <li ref={Option4} onClick={()=>{checkAns(4)}}>{question.option4}</li>
         </ul>
         <button onClick={next}>Next</button>
-        <div className="index">{index +1} of {data.length} questions</div>
+        <div className="index">{index+1} of {data.length} questions</div></>}
+        
     </div>
   )
 }
