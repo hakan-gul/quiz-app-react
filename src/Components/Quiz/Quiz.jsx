@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import './quiz.css'
-import {data} from "../../assets/data.js"
+import {depresyon} from "../../assets/data.js"
 import { useRef } from 'react'
 
 const Quiz = () => {
    let [index, setIndex] = useState(0);
-   let [question, setQuestion] = useState(data[index]);
+   let [question, setQuestion] = useState(depresyon[index]);
    let [lock, setLock] = useState(false);
    let [score, setScore] = useState(0);
    let [result,setResult] = useState(false)
@@ -18,26 +18,32 @@ const Quiz = () => {
    let option_array = [Option1,Option2,Option3,Option4];
 
    const checkAns = (ans) =>{
-     if (lock === false){
+    if (lock === false){
       option_array.map((option)=>(
         option.current.classList.remove("correct")
       ))
-       option_array[ans-1].current.classList.add("correct");
-       setLock(true);
-       if(question.ans==ans){
-        setScore(prev=> prev + 1);
+      option_array[ans-1].current.classList.add("correct");
+      setLock(true);
+      if(Array.isArray(question.ans)){
+        if(question.ans.includes(ans)){
+          setScore(prev=> prev + 1);
+        }
+      } else {
+        if(question.ans == ans){
+          setScore(prev=> prev + 1);
+        }
+      }
     }
-    }
-   }
+  }
 
   const next = () =>{
     if (lock===true) {
-      if(index ===data.length-1){
+      if(index ===depresyon.length-1){
         setResult(true);
         return 0;
       }
       setIndex(++index)
-      setQuestion(data[index]);
+      setQuestion(depresyon[index]);
       setLock(false);
       option_array.map((option)=>(
         option.current.classList.remove("correct")
@@ -47,7 +53,7 @@ const Quiz = () => {
 
   const reset = ()=>{
     setIndex(0);
-    setQuestion(data[0]);
+    setQuestion(depresyon[0]);
     setScore(0);
     setLock(false);
     setResult(false);
@@ -62,7 +68,7 @@ const Quiz = () => {
               {result?<>
               <div className='flex items-center justify-center'>
                 <div className='font-bold text-xl mb-7'>
-                  skorunuz %{score*20} tebrikler
+                  skorunuz %{score*10} tebrikler
                 </div>
               </div>
               <div className='flex items-center justify-center'>
@@ -76,7 +82,7 @@ const Quiz = () => {
               <div className='flex items-center justify-center'>
                 <button onClick={next}>Next</button>
               </div>
-              <div className="index flex items-center justify-center pt-3">{index+1} / {data.length} Soru</div></>}
+              <div className="index flex items-center justify-center pt-3">{index+1} / {depresyon.length} Soru</div></>}
           </div>
         </div>
       </div>
